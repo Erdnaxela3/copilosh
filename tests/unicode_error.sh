@@ -1,0 +1,1 @@
+python3 unicode_error.py
