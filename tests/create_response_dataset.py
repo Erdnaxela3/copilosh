@@ -1,3 +1,4 @@
+import time
 from dataclasses import asdict, dataclass
 
 import yaml
@@ -27,6 +28,7 @@ class ResponseFromModel:
     error_id: int
     system_prompt_id: int
     parsed_response: str
+    time: float
 
 
 def user_prompt_formatter(cmd_error: CmdError) -> str:
@@ -58,8 +60,10 @@ def main():
         for cmd_err in cmd_errors:
             for sp in system_prompts:
                 user_prompt = user_prompt_formatter(cmd_err)
+                start_time = time.time()
                 response = model.get_response(system_prompt=sp, user_prompt=user_prompt)
                 parsed_response = model.parse_response(response)
+                response_time = time.time() - start_time
 
                 responses.append(
                     ResponseFromModel(
@@ -67,6 +71,7 @@ def main():
                         error_id=cmd_err.id,
                         system_prompt_id=sp.id,
                         parsed_response=parsed_response,
+                        time=response_time,
                     )
                 )
     dict_responses = [asdict(r) for r in responses]
