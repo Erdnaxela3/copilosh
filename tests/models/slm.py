@@ -1,5 +1,5 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
 from llama_cpp import Llama
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 DEVICE='cpu'
 MAX_TOKENS=512
@@ -44,6 +44,8 @@ class SLM:
         """
         raise NotImplementedError()
 
+# ============================== SMOLLM2 135M INSTRUCT ==============================
+
 class SmolLM2135MInstruct(SLM):
     def __init__(self) -> None:
         super().__init__()
@@ -67,20 +69,107 @@ class SmolLM2135MInstruct(SLM):
         )
 
     def get_response(self, system_prompt: str, user_prompt: str) -> str:
-        messages = [{"role": "user", "content": user_prompt}]
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
         input_text = self.tokenizer.apply_chat_template(messages, tokenize=False)
-        inputs = self.tokenizer.encode(input_text, return_tensors="pt")
+        inputs = self.tokenizer.encode(input_text, return_tensors="pt").to(device=DEVICE)
         outputs = self.model.generate(
             inputs,
-            min_new_tokens=100,
-            max_new_tokens=250,
-            temperature=0.2,
-            top_p=0.9,
+            max_new_tokens=MAX_TOKENS,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,
             do_sample=True,
             early_stopping=True,
         )
         response = self.tokenizer.decode(outputs[0])
         return response
+
+class SmolLM135MInstructGGUF(SLM):
+    def __init__(self):
+        super().__init__()
+        self.model_path = "MaziyarPanahi/SmolLM2-135M-Instruct-GGUF"
+        self.cache_dir = "./cache"
+    
+    def load_model(self):
+        self.model = Llama.from_pretrained(self.model_path, filename="SmolLM2-135M-Instruct.Q2_K.gguf")
+    
+    def get_response(self, system_prompt, user_prompt):
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        outputs = self.model.create_chat_completion(
+            messages,
+            max_tokens=MAX_TOKENS,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,
+        )
+        return outputs
+    
+    def parse_response(self, response: str) -> str:
+        return response
+
+# ============================== YI CODER 1.5B CHAT ==============================
+
+class YiCoder15BChat(SLM):
+    def __init__(self) -> None:
+        super().__init__()
+        self.model_path = "01-ai/Yi-Coder-1.5B-Chat"
+        self.cache_dir = "./cache"
+
+    def load_model(self) -> None:
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_path, cache_dir=self.cache_dir
+        )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_path, cache_dir=self.cache_dir
+        )
+
+    def get_response(self, system_prompt: str, user_prompt: str) -> str:
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        input_text = self.tokenizer.apply_chat_template(messages, tokenize=False)
+        inputs = self.tokenizer.encode(input_text, return_tensors="pt").to(device=DEVICE)
+        outputs = self.model.generate(
+            inputs,
+            max_new_tokens=MAX_TOKENS,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,
+            do_sample=True,
+            early_stopping=True,
+        )
+        response = self.tokenizer.decode(outputs[0])
+        return response
+
+    def parse_response(self, response: str) -> str:
+        return (
+            response.split("<|im_start|>assistant")[-1]
+            .strip()
+            .split("<|im_end|>")[0]
+            .strip()
+        )
+
+class YiCoder15BChatGGUF:
+    def __init__(self):
+        self.model_path = "bartowski/Yi-Coder-1.5B-Chat-GGUF"
+        self.cache_dir = "./cache"
+    
+    def load_model(self):
+        self.model = Llama.from_pretrained(
+            repo_id=self.model_path,
+            filename="Yi-Coder-1.5B-Chat-IQ2_M.gguf",
+        )
+
+    def get_response(self, system_prompt: str, user_prompt: str) -> str:
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+        outputs = self.model.create_chat_completion(
+            messages,
+            max_tokens=MAX_TOKENS,
+            temperature=TEMPERATURE,
+            top_p=TOP_P,            
+        )
+        return outputs
+    
+    def parse_response(self, response: str) -> str:
+        print(response)
+        return (
+            response
+        )
 
 # ============================== ZEPHIR SMOL LLAMA 100M STF FULL ==============================
 
@@ -273,6 +362,7 @@ class TinyLlamaChatGGUF(SLM):
                 prompt,
                 max_tokens=MAX_TOKENS,
                 stop=["</s>"],
+                echo=True,
             )
         )
         return llama_response
@@ -343,12 +433,16 @@ class PhiMiniInstructGGUF(SLM):
                 prompt,
                 max_tokens=MAX_TOKENS,
                 stop=["</s>"],
+                echo=True,
             )
         )
         return llama_response
 
 model_to_class = {
     "HuggingFaceTB/SmolLM2-135M-Instruct": SmolLM2135MInstruct,
+    "MaziyarPanahi/SmolLM2-135M-Instruct-GGUF": SmolLM135MInstructGGUF,
+    "01-ai/Yi-Coder-1.5B-Chat": YiCoder15BChat,
+    "bartowski/Yi-Coder-1.5B-Chat-GGUF": YiCoder15BChatGGUF,
     "amazingvince/zephyr-smol_llama-100m-sft-full": ZephirSmolLlama100mStfFull,
     "afrideva/zephyr-smol_llama-100m-sft-full-GGUF": ZephirSmolLlama100mStfFullGGUF,
     "deepseek-ai/deepseek-coder-1.3b-base": DeepseekCoderBase,
