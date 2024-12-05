@@ -205,10 +205,160 @@ class DeepSeekCoderBaseGGUF(SLM):
         response = llama_response["choices"][0]["text"]
         return response
 
+class TinyLlamaInstruct(SLM):
+    def __init__(self) -> None:
+        super().__init__()
+        self.model_path = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+        self.cache_dir = "./cache"
+
+    def load_model(self) -> None:
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_path, cache_dir=self.cache_dir
+        )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_path, cache_dir=self.cache_dir
+        )
+
+    def parse_response(self, response: str) -> str:
+        return (
+            response.split("<|assistant|>")[1]
+            .strip()
+        )
+
+    def get_response(self, system_prompt: str, user_prompt: str) -> str:
+        messages = [
+            # {"role" : "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        input_text = self.tokenizer.apply_chat_template(messages, tokenize=False)
+        inputs = self.tokenizer.encode(input_text, return_tensors="pt")
+        outputs = self.model.generate(
+            inputs,
+            min_new_tokens=100,
+            max_new_tokens=250,
+            temperature=0.2,
+            top_p=0.9,
+            do_sample=True,
+            early_stopping=True,
+        )
+        response = self.tokenizer.decode(outputs[0])
+        return response
+    
+class MicrosoftPhiInstruct(SLM):
+    def __init__(self) -> None:
+        super().__init__()
+        self.model_path = "microsoft/Phi-3.5-mini-instruct"
+        self.cache_dir = "./cache"
+
+    def load_model(self) -> None:
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_path, cache_dir=self.cache_dir
+        )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_path, cache_dir=self.cache_dir
+        )
+
+    def parse_response(self, response: str) -> str:
+        return (
+            response.split("<|im_start|>assistant")[-1]
+            .strip()
+            .split("<|im_end|>")[0]
+            .strip()
+        )
+
+    def get_response(self, system_prompt: str, user_prompt: str) -> str:
+        messages = [
+            # {"role" : "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        input_text = self.tokenizer.apply_chat_template(messages, tokenize=False)
+        inputs = self.tokenizer.encode(input_text, return_tensors="pt")
+        outputs = self.model.generate(
+            inputs,
+            min_new_tokens=100,
+            max_new_tokens=250,
+            temperature=0.2,
+            top_p=0.9,
+            do_sample=True,
+            early_stopping=True,
+        )
+        response = self.tokenizer.decode(outputs[0])
+        return response
+
+class TheBlokeTinyLlamaInstruct(SLM):
+    def __init__(self) -> None:
+        super().__init__()
+        self.model_path = "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF"
+        self.cache_dir = "./cache"
+
+    def load_model(self) -> None:
+        self.model = Llama.from_pretrained(
+            n_ctx=2048,
+            n_threads=8,
+            repo_id=self.model_path,
+            filename="tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf", # 3.8GB RAM required
+        )
+
+    def parse_response(self, response: str) -> str:
+        # Default system prompt
+        return response["choices"][0]["text"].split("<|assistant|>")[1].strip()
+
+    def get_response(self, system_prompt: str, user_prompt: str) -> str:
+        
+        if system_prompt == "" :
+            system_prompt = "You are a highly skilled and approachable debugging assistant named CodeFix. You excel at identifying and resolving coding errors while providing clear, step-by-step guidance. You have a patient, problem-solving mindset, and you strive to make debugging an empowering learning experience for the user. Your explanations are precise and beginner-friendly, with actionable advice tailored to the user's level of expertise."
+        prompt = f"<|system|>\n{system_prompt}</s>\n<|user|>\n{user_prompt}</s>\n<|assistant|>"
+        llama_response = (
+            self.model(
+                prompt,
+                max_tokens=512,
+                stop=["</s>"],
+                echo=True
+            )
+        )
+        return llama_response
+
+class TensorblockPhiInstruct(SLM):
+    def __init__(self) -> None:
+        super().__init__()
+        self.model_path = "tensorblock/Phi-3.5-mini-instruct-GGUF"
+        self.cache_dir = "./cache"
+
+    def load_model(self) -> None:
+        self.model = Llama.from_pretrained(
+            n_ctx=2048,
+            n_threads=8,
+            repo_id=self.model_path,
+            filename="Phi-3.5-mini-instruct-Q5_K_M.gguf", # 3.8GB RAM required
+        )
+
+    def parse_response(self, response: str) -> str:
+        return response["choices"][0]["text"].split("<|assistant|>")[1].strip()
+
+    def get_response(self, system_prompt: str, user_prompt: str) -> str:
+        
+        if system_prompt == "" :
+            # Default system prompt
+            system_prompt = "You are a highly skilled and approachable debugging assistant named CodeFix. You excel at identifying and resolving coding errors while providing clear, step-by-step guidance. You have a patient, problem-solving mindset, and you strive to make debugging an empowering learning experience for the user. Your explanations are precise and beginner-friendly, with actionable advice tailored to the user's level of expertise."
+        prompt = f"<|system|>\n{system_prompt}</s>\n<|user|>\n{user_prompt}</s>\n<|assistant|>"
+        llama_response = (
+            self.model(
+                prompt,
+                max_tokens=512,
+                stop=["</s>"],
+                echo=True
+            )
+        )
+        return llama_response
+
 model_to_class = {
     "HuggingFaceTB/SmolLM2-135M-Instruct": SmolLM135MInstruct,
     "amazingvince/zephyr-smol_llama-100m-sft-full": ZephirSmolLlama100mStfFull,
     "afrideva/zephyr-smol_llama-100m-sft-full-GGUF": ZephirSmolLlama100mStfFullGGUF,
     "deepseek-ai/deepseek-coder-1.3b-base": DeepseekCoderBase,
-    "TheBloke/deepseek-coder-1.3b-base-GGUF": DeepSeekCoderBaseGGUF
+    "TheBloke/deepseek-coder-1.3b-base-GGUF": DeepSeekCoderBaseGGUF,
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0": TinyLlamaInstruct,
+    "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF": TheBlokeTinyLlamaInstruct,
+    "tensorblock/Phi-3.5-mini-instruct-GGUF": TensorblockPhiInstruct,
+    "microsoft/Phi-3.5-mini-instruct": MicrosoftPhiInstruct
 }
