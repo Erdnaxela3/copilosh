@@ -83,7 +83,7 @@ class SmolLM2135MInstruct(SLM):
         response = self.tokenizer.decode(outputs[0])
         return response
 
-class SmolLM135MInstructGGUF(SLM):
+class SmolLM2135MInstructGGUF(SLM):
     def __init__(self):
         super().__init__()
         self.model_path = "MaziyarPanahi/SmolLM2-135M-Instruct-GGUF"
@@ -440,7 +440,7 @@ class PhiMiniInstructGGUF(SLM):
 
 model_to_class = {
     "HuggingFaceTB/SmolLM2-135M-Instruct": SmolLM2135MInstruct,
-    "MaziyarPanahi/SmolLM2-135M-Instruct-GGUF": SmolLM135MInstructGGUF,
+    "MaziyarPanahi/SmolLM2-135M-Instruct-GGUF": SmolLM2135MInstructGGUF,
     "01-ai/Yi-Coder-1.5B-Chat": YiCoder15BChat,
     "bartowski/Yi-Coder-1.5B-Chat-GGUF": YiCoder15BChatGGUF,
     "amazingvince/zephyr-smol_llama-100m-sft-full": ZephirSmolLlama100mStfFull,
