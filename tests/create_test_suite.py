@@ -26,15 +26,12 @@ def run_shell_scripts_and_collect_data(directory: str):
     for filename in os.listdir(directory):
         if filename.endswith(".sh"):
             script_path_from_cwd = os.path.join(directory, filename)
-            script_path_from_directory = os.path.abspath(script_path_from_cwd)
-            command = f"bash {script_path_from_directory}"
-
             with open(script_path_from_cwd, "r") as script_file:
                 script_content = script_file.read()
             try:
                 # Run the shell script and capture output and error
                 process = subprocess.run(
-                    command,
+                    script_content,
                     shell=True,
                     capture_output=True,
                     text=True,
