@@ -1,4 +1,4 @@
-chain_of_thought_prompting:
+- id: 1
   user_prompt:  |
     When running ls notfolder.
     It failed with exit code 1.
