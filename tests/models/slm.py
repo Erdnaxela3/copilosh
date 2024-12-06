@@ -3,7 +3,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 DEVICE='cpu'
 MAX_TOKENS=512
-TEMPERATURE=0.2
+MIN_TEMPERATURE=0.2
+MAX_TEMPERATURE=0.7
 TOP_P=0.9
 
 class SLM:
@@ -75,7 +76,7 @@ class SmolLM2135MInstruct(SLM):
         outputs = self.model.generate(
             inputs,
             max_new_tokens=MAX_TOKENS,
-            temperature=TEMPERATURE,
+            temperature=MIN_TEMPERATURE,
             top_p=TOP_P,
             do_sample=True,
             early_stopping=True,
@@ -97,8 +98,9 @@ class SmolLM2135MInstructGGUF(SLM):
         outputs = self.model.create_chat_completion(
             messages,
             max_tokens=MAX_TOKENS,
-            temperature=TEMPERATURE,
+            temperature=MAX_TEMPERATURE,
             top_p=TOP_P,
+            repeat_penalty=1.2,
         )
         return outputs
     
@@ -128,7 +130,7 @@ class YiCoder15BChat(SLM):
         outputs = self.model.generate(
             inputs,
             max_new_tokens=MAX_TOKENS,
-            temperature=TEMPERATURE,
+            temperature=MIN_TEMPERATURE,
             top_p=TOP_P,
             do_sample=True,
             early_stopping=True,
@@ -160,8 +162,9 @@ class YiCoder15BChatGGUF:
         outputs = self.model.create_chat_completion(
             messages,
             max_tokens=MAX_TOKENS,
-            temperature=TEMPERATURE,
-            top_p=TOP_P,            
+            temperature=MAX_TEMPERATURE,
+            top_p=TOP_P,
+            repeat_penalty=1.2,          
         )
         return outputs
     
@@ -330,7 +333,7 @@ class TinyLlamaChat(SLM):
         outputs = self.model.generate(
             inputs,
             max_new_tokens=MAX_TOKENS,
-            temperature=TEMPERATURE,
+            temperature=MIN_TEMPERATURE,
             top_p=TOP_P,
             do_sample=True,
             early_stopping=True,
@@ -401,7 +404,7 @@ class PhiMiniInstruct(SLM):
         outputs = self.model.generate(
             inputs,
             max_new_tokens=MAX_TOKENS,
-            temperature=TEMPERATURE,
+            temperature=MIN_TEMPERATURE,
             top_p=TOP_P,
             do_sample=True,
             early_stopping=True,
