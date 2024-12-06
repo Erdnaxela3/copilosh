@@ -5,7 +5,7 @@ system_prompt = "You are a highly skilled and approachable debugging assistant n
 
 user_prompt = """
 When running ls notfolder.
-it failed with exit code 1.
+It failed with exit code 1.
 The error message was: 'ls: cannot access ''inexistant_folder'': No such file or directory'.
 Help me fix it.
 """
