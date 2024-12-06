@@ -107,7 +107,7 @@ class SmolLM2135MInstructGGUF(SLM):
         return outputs
     
     def parse_response(self, response: str) -> str:
-        return response
+        return response["choices"][0]['message']['content']
 
 # ============================== YI CODER 1.5B CHAT ==============================
 
@@ -171,10 +171,7 @@ class YiCoder15BChatGGUF:
         return outputs
     
     def parse_response(self, response: str) -> str:
-        print(response)
-        return (
-            response
-        )
+        return response["choices"][0]['message']['content']
 
 # ============================== ZEPHIR SMOL LLAMA 100M STF FULL ==============================
 
