@@ -77,7 +77,7 @@ def main():
                 )
                 user_prompt = user_prompt_formatter(cmd_err)
                 start_time = time.time()
-                response = model.get_response(system_prompt=sp, user_prompt=user_prompt)
+                response = model.get_response(system_prompt=str(sp), user_prompt=user_prompt)
                 parsed_response = model.parse_response(response)
                 response_time = time.time() - start_time
 
