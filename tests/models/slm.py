@@ -6,6 +6,8 @@ MAX_TOKENS=512
 MIN_TEMPERATURE=0.2
 MAX_TEMPERATURE=0.7
 TOP_P=0.9
+N_CTX=2048
+N_THREADS=8
 
 class SLM:
     def __init__(self) -> None:
@@ -222,8 +224,8 @@ class ZephirSmolLlama100mStfFullGGUF(SLM):
     def load_model(self) -> None:
         self.model = Llama.from_pretrained(
             cache_dir = self.cache_dir,
-            n_ctx=2048,
-            n_threads=8, 
+            n_ctx=N_CTX,
+            n_threads=N_THREADS, 
             repo_id=self.model_name,
             filename=self.model_filename
         )
@@ -282,8 +284,8 @@ class DeepSeekCoderBaseGGUF(SLM):
     def load_model(self) -> None:
         self.model = Llama.from_pretrained(
             cache_dir = self.cache_dir,
-            n_ctx=2048,
-            n_threads=8,
+            n_ctx=N_CTX,
+            n_threads=N_THREADS,
             repo_id=self.model_name,
             filename=self.model_filename
         )
@@ -349,8 +351,8 @@ class TinyLlamaChatGGUF(SLM):
 
     def load_model(self) -> None:
         self.model = Llama.from_pretrained(
-            n_ctx=2048,
-            n_threads=8,
+            n_ctx=N_CTX,
+            n_threads=N_THREADS,
             repo_id=self.model_path,
             filename="tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf", # 3.8GB RAM required
         )
@@ -420,8 +422,8 @@ class PhiMiniInstructGGUF(SLM):
 
     def load_model(self) -> None:
         self.model = Llama.from_pretrained(
-            n_ctx=2048,
-            n_threads=8,
+            n_ctx=N_CTX,
+            n_threads=N_THREADS,
             repo_id=self.model_path,
             filename="Phi-3.5-mini-instruct-Q5_K_M.gguf", # 3.8GB RAM required
         )
