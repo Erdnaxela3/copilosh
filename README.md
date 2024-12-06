@@ -4,10 +4,17 @@ Your personal assistant directly integrated into your terminal.
 
 ## Pre-requisites
 
-Install python dependencies:
+Set up the environnements:
 
 ```bash
-pip install -r requirements.txt
+poetry lock --no-update # TO AVOID AUTO-UPDATE
+poetry install
+```
+
+Run the environnements:
+
+```bash
+poetry shell
 ```
 
 Create a cache directory, to store your models:

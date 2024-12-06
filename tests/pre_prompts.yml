@@ -1,0 +1,20 @@
+- id: 1
+  user_prompt:  |
+    When running ls notfolder.
+    It failed with exit code 1.
+    The error message was: 'ls: cannot access ''inexistant_folder'': No such file or directory'.
+    Help me fix it.
+  assistant_response: |
+    You should verify if inexistant_folder exist and is a folder
+    If it isn't you can fix this by using mkdir inexistant_folder and execute ls notfolder
+
+- id: 2
+  user_prompt:  |
+    When running ls notfolder.
+    It failed with exit code 1.
+    The error message was: 'ls: cannot access ''inexistant_folder'': No such file or directory'.
+    Help me fix it.
+  assistant_response: |
+    The ls command is used to list files. The given argument was 'notfolder', the command tried to list the files in the notfolder directory. 
+    You should verify if inexistant_folder exist and is a folder
+    If it isn't you can fix this by using mkdir inexistant_folder and execute ls notfolder

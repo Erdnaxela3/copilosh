@@ -14,6 +14,7 @@ Help me fix it.
 def test_model_to_class():
     for model_name, model_cls in model_to_class.items():
         try:
+            print("MODEL :", model_name)
             model = model_cls()
             model.load_model()
             response = model.get_response(
@@ -21,3 +22,5 @@ def test_model_to_class():
             )
         except Exception as e:
             pytest.fail(f"Model {model_name} failed with error: {e}")
+
+test_model_to_class()
