@@ -1,1 +1,0 @@
-python3 syntax_error_2.py

@@ -1,1 +1,0 @@
-print("This will cause a syntax error");
