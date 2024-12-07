@@ -20,6 +20,8 @@ protobuf = "^5.29.1"
 urllib3 = "^1.26.9" # avoid poetry bug
 uvicorn = "^0.32.1"
 fastapi = "^0.115.6"
+rouge-score = "^0.1.2"
+bert-score = "^0.3.13"
 
 
 [build-system]
