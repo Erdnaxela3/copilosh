@@ -10,17 +10,33 @@ The error message was: 'ls: cannot access ''inexistant_folder'': No such file or
 Help me fix it.
 """
 
+mock_messages = [
+    {"role": "user", "content": "Thanks!"},
+    {"role": "system", "content": "You're welcome!"},
+]
 
-def test_model_to_class():
-    for model_name, model_cls in model_to_class.items():
-        try:
-            print("MODEL :", model_name)
-            model = model_cls()
-            model.load_model()
-            response = model.get_response(
-                system_prompt=system_prompt, user_prompt=user_prompt
-            )
-        except Exception as e:
-            pytest.fail(f"Model {model_name} failed with error: {e}")
 
-test_model_to_class()
+@pytest.mark.parametrize(
+    "model_name, model_cls",
+    list(model_to_class.items()),
+)
+def test_model_get_response_no_messages(model_name: str, model_cls: type):
+    try:
+        model = model_cls()
+        model.load_model()
+        response = model.get_response(system_prompt=system_prompt, user_prompt=user_prompt, messages=None)
+    except Exception as e:
+        pytest.fail(f"Model {model_name} failed with error: {e}")
+
+
+@pytest.mark.parametrize(
+    "model_name, model_cls",
+    list(model_to_class.items()),
+)
+def test_model_get_response_with_messages(model_name: str, model_cls: type):
+    try:
+        model = model_cls()
+        model.load_model()
+        response = model.get_response(system_prompt=system_prompt, user_prompt=user_prompt, messages=mock_messages)
+    except Exception as e:
+        pytest.fail(f"Model {model_name} failed with error: {e}")

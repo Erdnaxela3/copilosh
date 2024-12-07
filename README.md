@@ -6,15 +6,16 @@ Your personal assistant directly integrated into your terminal.
 
 Set up the environnements:
 
+Create a conda environnement:
+```bash
+conda create -n copilosh_env python=3.8 poetry=1.4.0 --y
+conda activate copilosh_env
+```
+
+
 ```bash
 poetry lock --no-update # TO AVOID AUTO-UPDATE
 poetry install
-```
-
-Run the environnements:
-
-```bash
-poetry shell
 ```
 
 Create a cache directory, to store your models:
@@ -27,9 +28,16 @@ mkdir cache
 
 Add the copilosh wrapper function to your shell profile file (e.g. `~/.bashrc`, `~/.zshrc`, etc.):
 
+Ubuntu/Unix:
 ```bash
 cat copilosh.sh >> ~/.bashrc
-source ~/.bashrc
+source ~/.bashrc .
+```
+
+MacOS:
+```bash
+cat copilosh.sh >> ~/.zshrc
+source ~/.zshrc .
 ```
 
 Run the assistant server:
