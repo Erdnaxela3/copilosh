@@ -1,8 +1,17 @@
 function command_wrapper() {
     local status=$? # Capture the exit code
     local stderr_output
+    local should_report=true
 
-    if [ $status -ne 0 ]; then
+    local ok_codes=(0 130 137 143 141 255) # Codes that should not trigger a response (CTRL+C, SIGKILL, etc.)
+    for code in "${ok_codes[@]}"; do
+        if [ $status -eq $code ]; then
+            should_report=false
+            break
+        fi
+    done
+
+    if [ "$should_report" = true ]; then
         stderr_output=$( { eval "$LAST_COMMAND"; } 2>&1 )
 
         payload=$(jq -n \
