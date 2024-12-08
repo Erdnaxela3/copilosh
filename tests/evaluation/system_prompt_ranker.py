@@ -1,8 +1,8 @@
+import os
 import random
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-import numpy as np
 import pandas as pd
 import yaml
 
@@ -180,13 +180,24 @@ class SystemPromptRanker:
         """
         Save group rankings to a file
         """
-        with open("group_system_prompt_rankings.csv", "a") as f:
-            for group_key, rankings in self.group_rankings.items():
-                sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
-                for system_prompt, rank in sorted_rankings:
-                    f.write(
-                        f"{self.preferred_model},{group_key[0]},{group_key[1]},{system_prompt},{rank}\n"
-                    )
+
+        if os.path.exists("group_system_prompt_rankings.csv"):
+            df = pd.read_csv("group_system_prompt_rankings.csv")
+        else:
+            df = pd.DataFrame()
+                              
+        for group_key, rankings in self.group_rankings.items():
+            sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
+            for system_prompt, rank in sorted_rankings:
+                new_row = {
+                    "model": self.preferred_model,
+                    "error_id": group_key[0],
+                    "preprompt_id": group_key[1],
+                    "system_prompt_id": system_prompt,
+                    "system_prompt_rank": rank,
+                }
+                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+                df.to_csv("group_system_prompt_rankings.csv", index=False)
 
         print("\nRankings have been saved to 'group_system_prompt_rankings.csv'")
 

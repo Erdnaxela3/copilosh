@@ -1,8 +1,8 @@
+import os
 import random
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
-import numpy as np
 import pandas as pd
 import yaml
 
@@ -23,7 +23,7 @@ with open("../test_suite_results.yml", "r") as f:
 
 class PrepromptRanker:
     def __init__(
-        self, csv_path: str, preferred_model: str, preferred_system_prompt_id: int, response_id: int
+        self, csv_path: str, preferred_model: str, preferred_system_prompt_id: int
     ):
         """
         Initialize the PrepromptRanker with CSV data, preferred model, and system prompt
@@ -182,13 +182,24 @@ class PrepromptRanker:
         """
         Save group rankings to a file
         """
-        with open("group_preprompt_rankings.csv", "a") as f:
-            for error_id, rankings in self.group_rankings.items():
-                sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
-                for preprompt, rank in sorted_rankings:
-                    f.write(
-                        f"{self.response_id},{self.preferred_model},{error_id},{self.preferred_system_prompt_id},{preprompt},{rank}\n"
-                    )
+
+        if os.path.exists("group_preprompt_rankings.csv"):
+            df = pd.read_csv("group_preprompt_rankings.csv")
+        else:
+            df = pd.DataFrame()
+                    
+        for error_id, rankings in self.group_rankings.items():
+            sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
+            for preprompt, rank in sorted_rankings:
+                new_row = {
+                    "model": self.preferred_model,
+                    "error_id": error_id,
+                    "system_prompt_id": self.preferred_system_prompt_id,
+                    "preprompt_id": preprompt,
+                    "preprompt_rank": rank,
+                }
+                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+                df.to_csv("group_preprompt_rankings.csv", index=False)
 
         print("\nRankings have been saved to 'group_preprompt_rankings.csv'")
 

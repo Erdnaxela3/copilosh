@@ -1,8 +1,8 @@
+import os
 import random
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-import numpy as np
 import pandas as pd
 import yaml
 
@@ -168,15 +168,23 @@ class ModelRanker:
         Save group rankings to a file
         """
 
-        with open("group_model_rankings.csv", "a") as f:
-            if not f:
-                f.write("error_id,system_prompt_id,preprompt_id,model,rank\n")
-            for group_key, rankings in self.group_rankings.items():
-                sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
-                for model, rank in sorted_rankings:
-                    f.write(
-                        f"{group_key[0]},{group_key[1]},{group_key[2]},{model},{rank}\n"
-                    )
+        if os.path.exists("group_model_rankings.csv"):
+            df = pd.read_csv("group_model_rankings.csv")
+        else:
+            df = pd.DataFrame()
+        
+        for group_key, rankings in self.group_rankings.items():
+            sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
+            for model, rank in sorted_rankings:
+                new_row = {
+                    "error_id": group_key[0],
+                    "system_prompt_id": group_key[1],
+                    "preprompt_id": group_key[2],
+                    "model": model,
+                    "model_rank": rank,
+                }
+                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+                df.to_csv("group_model_rankings.csv", index=False)
 
         print("\nRankings have been saved to 'group_model_rankings.csv'")
 

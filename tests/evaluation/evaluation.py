@@ -1,9 +1,11 @@
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
+
 import pandas as pd
 import yaml
 from evaluate import load
 from rouge_score import rouge_scorer
+
 
 @dataclass
 class ResponseFromModel:
@@ -80,7 +82,6 @@ def main():
             "error_id": model_response.error_id,
             "system_prompt_id": model_response.system_prompt_id,
             "preprompt_id": model_response.preprompt_id,
-            "rank": 0,
             "parsed_response": model_response.parsed_response,
             "time": model_response.time,
             "rouge_1": red_scores['rouge1'].fmeasure,
