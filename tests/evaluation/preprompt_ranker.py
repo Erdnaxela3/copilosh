@@ -23,7 +23,7 @@ with open("../test_suite_results.yml", "r") as f:
 
 class PrepromptRanker:
     def __init__(
-        self, csv_path: str, preferred_model: str, preferred_system_prompt_id: int
+        self, csv_path: str, preferred_model: str, preferred_system_prompt_id: int, response_id: int
     ):
         """
         Initialize the PrepromptRanker with CSV data, preferred model, and system prompt
@@ -187,7 +187,7 @@ class PrepromptRanker:
                 sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
                 for preprompt, rank in sorted_rankings:
                     f.write(
-                        f"{self.preferred_model},{error_id},{self.preferred_system_prompt_id},{preprompt},{rank}\n"
+                        f"{self.response_id},{self.preferred_model},{error_id},{self.preferred_system_prompt_id},{preprompt},{rank}\n"
                     )
 
         print("\nRankings have been saved to 'group_preprompt_rankings.csv'")

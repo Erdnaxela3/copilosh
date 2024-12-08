@@ -169,6 +169,8 @@ class ModelRanker:
         """
 
         with open("group_model_rankings.csv", "a") as f:
+            if not f:
+                f.write("error_id,system_prompt_id,preprompt_id,model,rank\n")
             for group_key, rankings in self.group_rankings.items():
                 sorted_rankings = sorted(rankings.items(), key=lambda x: x[1])
                 for model, rank in sorted_rankings:
@@ -176,7 +178,7 @@ class ModelRanker:
                         f"{group_key[0]},{group_key[1]},{group_key[2]},{model},{rank}\n"
                     )
 
-        print("\nRankings have been saved to 'group_model_rankings.txt'")
+        print("\nRankings have been saved to 'group_model_rankings.csv'")
 
 
 def main(csv_path: str):
