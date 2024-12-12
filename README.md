@@ -2,6 +2,9 @@
 
 Your personal assistant directly integrated into your terminal.
 
+## Description
+Copilo.sh is a wrapper function to add to your .bashrc or .zshrc file. Accompanied by a FastAPI local server, running a LM on CPU. It will catch all the errors you make in your terminal (non-zero exit code) and call the LM to generate a response to help you solve the error.
+
 ## Pre-requisites
 
 Set up the environnements:
