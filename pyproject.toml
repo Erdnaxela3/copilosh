@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "copilosh"
+version = "0.1.0"
+description = ""
+authors = ["Alexandre WENG <alexandre.weng@epita.fr>", "Paul Guan <paul.guan@epita.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+black = "^24.8.0" # code formatter
+transformers = "^4.46.3"
+torch = "2.2.2"
+sentencepiece = "^0.2.0"
+numpy = "^1.24.4"
+llama-cpp-python = "0.3.2"
+PyYAML = "^6.0.2"
+evaluate = "^0.4.3"
+pytest = "^8.3.4"
+protobuf = "^5.29.1"
+urllib3 = "^1.26.9" # avoid poetry bug
+uvicorn = "^0.32.1"
+fastapi = "^0.115.6"
+rouge-score = "^0.1.2"
+bert-score = "^0.3.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
