@@ -1,0 +1,174 @@
+.app-container {
+  font-family: Arial, sans-serif;
+  width: 70%;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.model-settings {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 94%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  font-size: 14px;
+  color: #555;
+}
+
+.suggestions-list {
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 5%;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f1f1f1;
+}
+
+.suggestion-item:active {
+  background-color: #ddd;
+}
+
+.error-inputs {
+  display: flex;
+  flex-direction: c;
+  gap: 10px;
+}
+
+.error-textarea {
+  height: 140px;
+}
+
+.response-responseAI {
+  padding: 3%;
+  background-color: aliceblue;
+  border-radius: 10px;
+}
+
+.pre-prompt-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pre-prompt-textarea {
+  width: 97%;
+  height: 150px;
+  margin-top: 10px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  background-color: #f9f9f9;
+}
+
+.pre-prompt-user-textarea {
+  background-color: darkgray;
+}
+
+.pre-prompt-assistant-textarea {
+  background-color: deepskyblue;
+}
+
+/* Styling the label */
+.input-container label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Styling the select dropdown */
+.input-container select {
+  font-size: 16px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover effect on the select */
+.input-container select:hover {
+  border-color: #888;
+}
+
+/* Styling when the select is disabled */
+.input-container select:disabled {
+  background-color: #eaeaea;
+  cursor: not-allowed;
+}
+
+/* Styling for the loading spinner */
+.loading-spinner {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #888;
+}
+
+/* Add a little animation to the loading spinner */
+.loading-spinner::after {
+  content: "...";
+  animation: loadingAnimation 1.5s infinite;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    content: ".";
+  }
+  33% {
+    content: "..";
+  }
+  66% {
+    content: "...";
+  }
+  100% {
+    content: ".";
+  }
+}

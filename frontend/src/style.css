@@ -1,0 +1,162 @@
+.app-container {
+  font-family: Arial, sans-serif;
+  width: 90%;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 94%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  font-size: 14px;
+  color: #555;
+}
+
+.suggestions-list {
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 5%;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f1f1f1;
+}
+
+.suggestion-item:active {
+  background-color: #ddd;
+}
+
+.error-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.error-textarea {
+  height: 140px;
+}
+
+.response-responseAI {
+  padding: 3%;
+  background-color: aliceblue;
+  border-radius: 10px;
+}
+
+/* Barre de navigation */
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333; /* Adjust background color as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  margin-right: 1%;
+}
+
+.logo-image {
+  height: 40px; /* Adjust the size of the logo */
+  width: auto;
+}
+
+.navbar-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  margin: 0 10px;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.navbar-link.active {
+  color: #007bff; /* Highlight color for active link */
+}
+
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  background-color: #333;
+  border-radius: 10px;
+  padding: 15px;
+  height: 500px;
+  overflow-y: scroll;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-bubble-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px; /* Space between bubbles */
+}
+
+.chat-bubble {
+  max-width: 70%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.user-bubble {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.ai-bubble {
+  background-color: #eaeaea;
+  color: #333;
+  align-self: flex-start;
+  text-align: left;
+}

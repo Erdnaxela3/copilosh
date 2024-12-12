@@ -34,16 +34,29 @@ cat copilosh.sh >> ~/.bashrc
 source ~/.bashrc .
 ```
 
-MacOS:
+MacOS for new version :
 ```bash
 cat copilosh.sh >> ~/.zshrc
 source ~/.zshrc .
 ```
 
+MacOS for old version :
+```bash
+cat copilosh.sh >> ~/.bash_profile
+source ~/.bash_profile .
+```
+
 Run the assistant server:
 
 ```bash
-uvicorn app:app --host 0.0.0.0 --port 8082
+uvicorn app:app --host 0.0.0.0 --port 8080
+```
+
+Run the frontend:
+
+```bash
+cd frontend
+npm start
 ```
 
 ## Usage

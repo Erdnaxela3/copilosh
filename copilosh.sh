@@ -20,7 +20,7 @@ function command_wrapper() {
             --arg stderr "$stderr_output" \
             '{command: $command, exit_code: $exit_code, stderr: $stderr}')
 
-        response=$(curl -s -X POST http://localhost:8082/error \
+        response=$(curl -s -X POST http://localhost:8080/error \
              -H "Content-Type: application/json" \
              -d "$payload")
 
